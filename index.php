@@ -40,9 +40,7 @@ Router::add("/user/follow", "POST", fn() => $follow->toggle(), [
   fn() => AuthMiddleware::isNotAuth()
 ]);
 
-Router::add("/u/([0-9a-zA-Z\-_]+)", "GET", fn($username) => $userProfile->view($username), [
-  fn() => AuthMiddleware::isNotAuth()
-]);
+Router::add("/u/([0-9a-zA-Z\-_]+)", "GET", fn($username) => $userProfile->view($username));
 
 // Notification Routes
 Router::add("/notifications", "GET", fn() => $notification->index(), [
@@ -73,13 +71,8 @@ Router::add("/home/following", "GET", fn() => $home->home('following'), [
   fn() => AuthMiddleware::isNotAuth()
 ]);
 
-Router::add("/search", "GET", fn() => $search->page(), [
-  fn() => AuthMiddleware::isNotAuth()
-]);
-
-Router::add("/search/([0-9a-zA-Z\-_]+)", "GET", fn($query) => $search->page($query), [
-  fn() => AuthMiddleware::isNotAuth()
-]);
+Router::add("/search", "GET", fn() => $search->page());
+Router::add("/search/([0-9a-zA-Z\-_]+)", "GET", fn($query) => $search->page($query));
 
 Router::add("/pengaturan", "GET", fn() => $setting->index(), [
   fn() => AuthMiddleware::isNotAuth()
@@ -138,9 +131,7 @@ Router::add("/meme/report", "POST", fn() => $report->report(), [
 Router::add("/meme/create", "POST", fn() => $meme->createMeme(), [
   fn() => AuthMiddleware::isNotAuth()
 ]);
-Router::add("/meme/([0-9a-zA-Z]*)", "GET", fn($meme_id) => $meme->viewMeme($meme_id), [
-  fn() => AuthMiddleware::isNotAuth()
-]);
+Router::add("/meme/([0-9a-zA-Z]*)", "GET", fn($meme_id) => $meme->viewMeme($meme_id));
 Router::add("/meme/([0-9a-zA-Z]*)/delete", "GET", fn($meme_id) => $meme->deleteMeme($meme_id), [
   fn() => AuthMiddleware::isNotAuth()
 ]);

@@ -23,7 +23,9 @@ class SearchController
     $query = $query ?? '';
     $users = [];
 
-    $currentUser = self::$userService->getUserById($_SESSION['auth']["user_id"]);
+    $currentUser = isset($_SESSION['auth']['user_id']) 
+        ? self::$userService->getUserById($_SESSION['auth']["user_id"]) 
+        : null;
     
     $connDB = Database::connect();
     $followService = new \App\Pinnio\Service\FollowService(new \App\Pinnio\Repository\FollowRepository($connDB));
@@ -31,7 +33,9 @@ class SearchController
     if (!empty($query)) {
       $users = self::$userService->searchUsers($query);
       foreach ($users as &$u) {
-        $u['is_following'] = $followService->isFollowing($_SESSION['auth']["user_id"], $u['user_id']);
+        $u['is_following'] = isset($_SESSION['auth']['user_id']) 
+            ? $followService->isFollowing($_SESSION['auth']["user_id"], $u['user_id']) 
+            : false;
       }
     }
 

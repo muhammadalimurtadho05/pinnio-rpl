@@ -49,8 +49,8 @@
                         <small style="color:var(--pin-muted);">@<?= htmlspecialchars($u['username']) ?></small>
                       </div>
                     </a>
-                    <?php if ($u['user_id'] !== $data['user']['user_id']): ?>
-                      <button class="btn <?= $u['is_following'] ? 'btn-outline-light' : 'btn-pin' ?> btn-sm rounded-pill px-3 follow-btn" data-user-id="<?= $u['user_id'] ?>">
+                    <?php if (isset($_SESSION['auth']['user_id']) && $u['user_id'] !== $data['user']['user_id']): ?>
+                      <button class="btn <?= $u['is_following'] ? 'btn-outline-light' : 'btn-pin' ?> rounded-pill px-4 follow-btn" data-user-id="<?= $u['user_id'] ?>" onclick="event.preventDefault(); toggleFollow(this)">
                         <?= $u['is_following'] ? 'Following' : 'Follow' ?>
                       </button>
                     <?php endif; ?>

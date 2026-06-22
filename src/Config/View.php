@@ -23,28 +23,33 @@ class View
         "name" => "Search",
         "path" => "/search",
         "icon" => "search"
-      ],
-      [
-        "name" => "Chat",
-        "path" => "/chat",
-        "icon" => "chat-dots-fill"
-      ],
-      [
-        "name" => "Notifikasi",
-        "path" => "/notifications",
-        "icon" => "bell-fill"
-      ],
-      [
-        "name" => "Profile",
-        "path" => "/profile",
-        "icon" => "person-fill"
-      ],
-      [
-        "name" => "Pengaturan",
-        "path" => "/pengaturan",
-        "icon" => "gear-fill"
       ]
     ];
+
+    if (isset($_SESSION['auth']['user_id'])) {
+      $data["navigation"] = array_merge($data["navigation"], [
+        [
+          "name" => "Chat",
+          "path" => "/chat",
+          "icon" => "chat-dots-fill"
+        ],
+        [
+          "name" => "Notifikasi",
+          "path" => "/notifications",
+          "icon" => "bell-fill"
+        ],
+        [
+          "name" => "Profile",
+          "path" => "/profile",
+          "icon" => "person-fill"
+        ],
+        [
+          "name" => "Pengaturan",
+          "path" => "/pengaturan",
+          "icon" => "gear-fill"
+        ]
+      ]);
+    }
 
     if (isset($_SESSION["auth"]["role"]) && $_SESSION["auth"]["role"] === 'admin') {
       $data["navigation"][] = [

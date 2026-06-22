@@ -34,10 +34,12 @@
               </div>
             </div>
             <!-- Dropdown menu for own post -->
-            <?php if ($data["meme"]["user_id"] === $_SESSION['auth']['user_id']): ?>
-              <?php require __DIR__ . "/dropdown_user.php"; ?>
-            <?php else: ?>
-              <?php require __DIR__ . "/dropdown.php"; ?>
+            <?php if (isset($_SESSION['auth']['user_id'])): ?>
+              <?php if ($data["meme"]["user_id"] === $_SESSION['auth']['user_id']): ?>
+                <?php require __DIR__ . "/dropdown_user.php"; ?>
+              <?php else: ?>
+                <?php require __DIR__ . "/dropdown.php"; ?>
+              <?php endif ?>
             <?php endif ?>
           </div>
 
@@ -54,33 +56,48 @@
 
           <!-- Actions row -->
           <div class="thread-actions pb-3" style="border-bottom:1px solid var(--pin-border);">
-            <button class="thread-action-btn <?= isset($data['meme']['is_liked']) && $data['meme']['is_liked'] ? 'liked' : '' ?>" data-action="like" data-meme-id="<?= $data['meme']['meme_id'] ?>" style="font-size:20px; padding:8px 14px;">
-              <i class="bi <?= isset($data['meme']['is_liked']) && $data['meme']['is_liked'] ? 'bi-heart-fill' : 'bi-heart' ?>"></i>
-              <span class="action-count"><?= $data["meme"]['likes_count'] ?></span>
-            </button>
-            <button class="thread-action-btn" style="font-size:20px; padding:8px 14px;" onclick="focusCommentBox()">
-              <i class="bi bi-chat"></i> <?= $data["meme"]['comments_count'] ?>
-            </button>
-            <button class="thread-action-btn ms-auto" style="font-size:20px; padding:8px 14px;">
-              <i class="bi bi-bookmark"></i>
-            </button>
+            <?php if (isset($_SESSION['auth']['user_id'])): ?>
+              <button class="thread-action-btn <?= isset($data['meme']['is_liked']) && $data['meme']['is_liked'] ? 'liked' : '' ?>" data-action="like" data-meme-id="<?= $data['meme']['meme_id'] ?>" style="font-size:20px; padding:8px 14px;">
+                <i class="bi <?= isset($data['meme']['is_liked']) && $data['meme']['is_liked'] ? 'bi-heart-fill' : 'bi-heart' ?>"></i>
+                <span class="action-count"><?= $data["meme"]['likes_count'] ?></span>
+              </button>
+              <button class="thread-action-btn" style="font-size:20px; padding:8px 14px;" onclick="focusCommentBox()">
+                <i class="bi bi-chat"></i> <?= $data["meme"]['comments_count'] ?>
+              </button>
+              <button class="thread-action-btn ms-auto" style="font-size:20px; padding:8px 14px;" data-action="bookmark" data-meme-id="<?= $data['meme']['meme_id'] ?>">
+                <i class="bi bi-bookmark"></i>
+              </button>
+            <?php else: ?>
+              <button class="thread-action-btn" style="font-size:20px; padding:8px 14px;" onclick="window.location.href='/login'">
+                <i class="bi bi-heart"></i>
+                <span class="action-count"><?= $data["meme"]['likes_count'] ?></span>
+              </button>
+              <button class="thread-action-btn" style="font-size:20px; padding:8px 14px;" onclick="window.location.href='/login'">
+                <i class="bi bi-chat"></i> <?= $data["meme"]['comments_count'] ?>
+              </button>
+              <button class="thread-action-btn ms-auto" style="font-size:20px; padding:8px 14px;" onclick="window.location.href='/login'">
+                <i class="bi bi-bookmark"></i>
+              </button>
+            <?php endif; ?>
           </div>
         </div>
 
         <!-- ===== ADD COMMENT ===== -->
-        <form action="/comment/<?= $data["meme"]["meme_id"] ?>" method="POST" class="comment-compose"
-          id="commentSection">
-          <div class="d-flex gap-3 align-items-start">
-            <div
-              style="width:40px;height:40px;border-radius:50%;background:var(--pin-card);border:1.5px solid var(--pin-border);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">
-              🙂</div>
-            <div class="flex-grow-1">
-              <textarea class="pin-input mb-2" name="content" id="content" placeholder="Tulis komentar kamu..."
-                rows="2"></textarea>
-              <button type="submit" class="btn btn-pin btn-sm">Kirim</button>
+        <?php if (isset($_SESSION['auth']['user_id'])): ?>
+          <form action="/comment/<?= $data["meme"]["meme_id"] ?>" method="POST" class="comment-compose"
+            id="commentSection">
+            <div class="d-flex gap-3 align-items-start">
+              <div
+                style="width:40px;height:40px;border-radius:50%;background:var(--pin-card);border:1.5px solid var(--pin-border);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">
+                🙂</div>
+              <div class="flex-grow-1">
+                <textarea class="pin-input mb-2" name="content" id="content" placeholder="Tulis komentar kamu..."
+                  rows="2"></textarea>
+                <button type="submit" class="btn btn-pin btn-sm">Kirim</button>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        <?php endif; ?>
 
         <!-- ===== COMMENTS LIST ===== -->
         <div id="commentsContainer" class="mt-3">
@@ -105,18 +122,20 @@
                     <div class="d-flex align-items-center justify-content-between mb-1">
                       <span style="color:var(--pin-muted);font-size:12px;">@<?= $comment["username"] ?> ·
                         <?= $comment["created_at"] ?></span>
-                      <div class="action-menu-wrap">
-                        <button class="btn-pin-ghost p-1" onclick="toggleDropdown('commentDrop1')">
-                          <i class="bi bi-three-dots"></i>
-                        </button>
-                        <div class="dropdown-menu-pin" id="commentDrop1">
-                          <div style="height:1px;background:var(--pin-border);margin:4px 0;"></div>
-                          <button class="dropdown-item-pin danger"
-                            onclick="closeDropdown('commentDrop1'); openModal('deleteCommentModal')">
-                            <i class="bi bi-trash3"></i> Hapus komentar
+                      <?php if (isset($_SESSION['auth']['user_id'])): ?>
+                        <div class="action-menu-wrap">
+                          <button class="btn-pin-ghost p-1" onclick="toggleDropdown('commentDrop<?= $comment['comment_id'] ?>')">
+                            <i class="bi bi-three-dots"></i>
                           </button>
+                          <div class="dropdown-menu-pin" id="commentDrop<?= $comment['comment_id'] ?>">
+                            <div style="height:1px;background:var(--pin-border);margin:4px 0;"></div>
+                            <button class="dropdown-item-pin danger"
+                              onclick="closeDropdown('commentDrop<?= $comment['comment_id'] ?>'); openModal('deleteCommentModal')">
+                              <i class="bi bi-trash3"></i> Hapus komentar
+                            </button>
+                          </div>
                         </div>
-                      </div>
+                      <?php endif; ?>
                     </div>
                     <p style="font-size:14px;margin-bottom:10px;"><?= $comment["content"] ?></p>
                   </div>

@@ -31,6 +31,14 @@ class UserProfileController
 
     private function enrichMemesWithLikedStatus(array $memes): array
     {
+        if (!isset($_SESSION['auth']['user_id'])) {
+            foreach ($memes as &$meme) {
+                $meme['is_liked'] = false;
+                $meme['is_bookmarked'] = false;
+            }
+            return $memes;
+        }
+
         $connDB = Database::connect();
         $likeRepository = new \App\Pinnio\Repository\LikeRepository($connDB);
         $likedMemeIds = $likeRepository->getLikedMemeIds($_SESSION['auth']["user_id"]);
@@ -51,7 +59,7 @@ class UserProfileController
             $user = self::$userService->getUserByUsername($username);
             
             // Redirect to own profile if searching for oneself
-            if ($user['user_id'] === $_SESSION['auth']["user_id"]) {
+            if (isset($_SESSION['auth']['user_id']) && $user['user_id'] === $_SESSION['auth']["user_id"]) {
                 View::redirect("/profile");
                 return;
             }
@@ -59,7 +67,9 @@ class UserProfileController
             $memes = self::$memeService->getMemes($user['user_id']);
             $memes = $this->enrichMemesWithLikedStatus($memes);
             $stats = self::$userService->getUserStats($user['user_id']);
-            $isFollowing = self::$followService->isFollowing($_SESSION['auth']['user_id'], $user['user_id']);
+            $isFollowing = isset($_SESSION['auth']['user_id']) 
+                ? self::$followService->isFollowing($_SESSION['auth']['user_id'], $user['user_id']) 
+                : false;
 
             View::app("user_profile", [
                 "title" => $user['name'] . " (@" . $user['username'] . ") — PinThread",

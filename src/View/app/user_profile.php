@@ -29,12 +29,14 @@
               <p style="color:var(--pin-muted);margin:0;font-size:15px;">@<?= htmlspecialchars($data["user"]["username"]) ?></p>
             </div>
             <div class="d-flex gap-2">
-              <button class="btn <?= $data['is_following'] ? 'btn-outline-light' : 'btn-pin' ?> rounded-pill px-4 follow-btn" data-user-id="<?= $data['user']['user_id'] ?>" onclick="toggleFollow(this)">
-                <?= $data['is_following'] ? 'Following' : 'Follow' ?>
-              </button>
-              <a href="/chat/<?= htmlspecialchars($data['user']['username']) ?>" class="btn btn-outline-light rounded-pill px-4">
-                Message
-              </a>
+              <?php if (isset($_SESSION['auth']['user_id'])): ?>
+                <button class="btn <?= $data['is_following'] ? 'btn-outline-light' : 'btn-pin' ?> rounded-pill px-4 follow-btn" data-user-id="<?= $data['user']['user_id'] ?>" onclick="toggleFollow(this)">
+                  <?= $data['is_following'] ? 'Following' : 'Follow' ?>
+                </button>
+                <a href="/chat/<?= htmlspecialchars($data['user']['username']) ?>" class="btn btn-outline-light rounded-pill px-4">
+                  Message
+                </a>
+              <?php endif; ?>
             </div>
           </div>
           

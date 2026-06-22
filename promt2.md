@@ -1,9 +1,9 @@
 # Prompt
 
-## buatkan fitur notifikasi
-- ada halaman untuk menampilkan daftar notifikasi
-- setiap ada user yang like postingan, masukkan kedalam notifikasi
-- setiap ada yang chat, masuk ke notifikasi 
+semua fitur yang ada  sekarang hanya bisa diakses ketika sudah login
+saya ingin agar gust (yang tidak login) bisa membuka meme dan membaca komentar serta melakukan searching
+namun tidak bisa follow, chat, like, komen
 
 # Penting
-karena di pake math REQUEST_URI gunakan algoritma slug saja 
+- karena di pake math REQUEST_URI gunakan algoritma slug saja 
+- sesuaikan ui dari halaman yang lain

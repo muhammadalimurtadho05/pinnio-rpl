@@ -50,11 +50,15 @@ class MemeController
     public function viewMeme(int $meme_id): void
     {
         $meme = self::$memeService->getMemeById($meme_id);
-        $user = self::$userService->getUserById($_SESSION['auth']["user_id"]);
+        $user = isset($_SESSION['auth']["user_id"]) 
+            ? self::$userService->getUserById($_SESSION['auth']["user_id"]) 
+            : null;
 
         $connDB = Database::connect();
         $likeRepository = new \App\Pinnio\Repository\LikeRepository($connDB);
-        $meme['is_liked'] = $likeRepository->checkLikeExists($_SESSION['auth']["user_id"], $meme_id);
+        $meme['is_liked'] = isset($_SESSION['auth']["user_id"]) 
+            ? $likeRepository->checkLikeExists($_SESSION['auth']["user_id"], $meme_id)
+            : false;
 
         View::app("view_meme/view_meme", [
             "title" => "Meme — PinThread",
