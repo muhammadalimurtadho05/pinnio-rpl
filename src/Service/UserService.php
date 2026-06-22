@@ -51,7 +51,8 @@ class UserService
 
     $_SESSION["auth"] = [
       "user_id" => $result["user_id"],
-      "email" => $result["email"]
+      "email" => $result["email"],
+      "role" => $result["role"]
     ];
   }
 
@@ -82,5 +83,15 @@ class UserService
 
     $userModel->password = password_hash($new_password, PASSWORD_BCRYPT);
     self::$userRepository->updatePassword($userModel->user_id, $userModel->password);
+  }
+
+  public function getTotalUsersCount(): int
+  {
+    return self::$userRepository->getTotalUsersCount();
+  }
+
+  public function getRecentUsers(int $limit = 5): array
+  {
+    return self::$userRepository->getRecentUsers($limit);
   }
 }

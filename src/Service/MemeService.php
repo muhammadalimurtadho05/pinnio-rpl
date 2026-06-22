@@ -47,10 +47,11 @@ class MemeService
     public function deleteMeme(int $meme_id)
     {
         $meme = self::$memeRepository->getMemeById($meme_id);
-        if (file_exists(__DIR__ . "/../.." . $meme["image_url"])) {
-            unlink(__DIR__ . "/../.." . $meme["image_url"]);
-        } else {
-            throw new ValidationException("Failed to delete meme image");
+        if (!empty($meme["image_url"])) {
+            $imagePath = __DIR__ . "/../.." . $meme["image_url"];
+            if (file_exists($imagePath) && is_file($imagePath)) {
+                unlink($imagePath);
+            }
         }
         return self::$memeRepository->deleteMeme($meme_id);
     }
@@ -65,5 +66,10 @@ class MemeService
         $censoredCaption = CensorString::filter($caption);
 
         return self::$memeRepository->updateMeme($meme_id, $censoredCaption);
+    }
+
+    public function getTotalMemesCount(): int
+    {
+        return self::$memeRepository->getTotalMemesCount();
     }
 }
