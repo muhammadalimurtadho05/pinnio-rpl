@@ -56,6 +56,17 @@ class UserRepository
     return $statement;
   }
 
+  public function getTotalUsersCount(): int
+  {
+    $statement = self::$connDB->query("SELECT COUNT(*) FROM users");
+    return (int) $statement->fetchColumn();
+  }
+
+  public function getRecentUsers(int $limit = 5): array
+  {
+    $statement = self::$connDB->prepare("SELECT user_id, username, name, email, role, created_at FROM users ORDER BY created_at DESC LIMIT ?");
+    $statement->bindValue(1, $limit, \PDO::PARAM_INT);
+    $statement->execute();
   public function getFollowersCount(int $userID): int
   {
     $statement = self::$connDB->prepare("SELECT COUNT(*) FROM follows WHERE following_id = ?");

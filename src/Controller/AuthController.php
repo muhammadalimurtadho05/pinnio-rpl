@@ -40,7 +40,12 @@ class AuthController
       self::$authModel->password = $_POST["password"];
 
       self::$authService->auth(self::$authModel);
-      View::redirect("/home");
+      
+      if (isset($_SESSION["auth"]["role"]) && $_SESSION["auth"]["role"] === 'admin') {
+        View::redirect("/admin");
+      } else {
+        View::redirect("/home");
+      }
     } catch (ValidationException $e) {
       self::$display["error_message"] = $e->getMessage();
       View::render("login", self::$display);

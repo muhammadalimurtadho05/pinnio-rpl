@@ -46,4 +46,10 @@ class MemeRepository
         $statement = self::$connDB->prepare("UPDATE memes SET caption = ? WHERE meme_id = ?");
         return $statement->execute([$caption, $meme_id]);
     }
+
+    public function getTotalMemesCount(): int
+    {
+        $statement = self::$connDB->query("SELECT COUNT(*) FROM memes");
+        return (int) $statement->fetchColumn();
+    }
 }
