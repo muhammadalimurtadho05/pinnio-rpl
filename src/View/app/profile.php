@@ -82,9 +82,9 @@
                   🙂</div>
                 <div class="flex-grow-1">
                   <div class="d-flex justify-content-between align-items-center mb-1">
-                    <div><span
-                        style="font-weight:700;font-size:14px;"><?= $data["user"]["name"] ? $data["user"]["name"] : $data["user"]["username"] ?>
-                      </span> <span style="color:var(--pin-muted);font-size:13px;">@<?= $data["user"]["username"] ?> ·
+                    <div>
+                      <a href="/u/<?= htmlspecialchars($meme['username']) ?>" style="color:inherit;text-decoration:none;"><span style="font-weight:700;font-size:14px;"><?= $data["user"]["name"] ? $data["user"]["name"] : $data["user"]["username"] ?></span></a>
+                      <span style="color:var(--pin-muted);font-size:13px;">@<?= $data["user"]["username"] ?> ·
                         <?= $meme['created_at'] ?>
                       </span></div>
                     <div class="dropdown" onclick="event.stopPropagation()">

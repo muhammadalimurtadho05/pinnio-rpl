@@ -9,8 +9,8 @@
             <h5 style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;margin:0;">Home</h5>
           </div>
           <div class="pin-tabs">
-            <button class="pin-tab active" onclick="switchTab(this, 'forYou')">Untuk Kamu</button>
-            <button class="pin-tab" onclick="switchTab(this, 'following')">Mengikuti</button>
+            <button class="pin-tab <?= !isset($data['active_tab']) || $data['active_tab'] === 'forYou' ? 'active' : '' ?>" onclick="window.location.href='/home'">Untuk Kamu</button>
+            <button class="pin-tab <?= isset($data['active_tab']) && $data['active_tab'] === 'following' ? 'active' : '' ?>" onclick="window.location.href='/home/following'">Mengikuti</button>
           </div>
         </div>
       </div>
@@ -40,7 +40,7 @@
                   <div class="flex-grow-1 pb-2">
                     <div class="d-flex align-items-center justify-content-between mb-1">
                       <div>
-                        <span style="font-weight:700;font-size:14px;"><?= $meme['username'] ?></span>
+                        <a href="/u/<?= htmlspecialchars($meme['username']) ?>" style="color:inherit;text-decoration:none;"><span style="font-weight:700;font-size:14px;"><?= $meme['username'] ?></span></a>
                         <span style="color:var(--pin-muted);font-size:13px;margin-left:6px;"><?= $meme['created_at'] ?></span>
                       </div>
                       <div class="dropdown" onclick="event.stopPropagation()">

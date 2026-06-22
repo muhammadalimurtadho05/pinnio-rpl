@@ -150,20 +150,58 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Follow button toggle
-document.addEventListener("click", (e) => {
+// Follow button toggle (AJAX)
+document.addEventListener("click", async (e) => {
   const btn = e.target.closest(".follow-btn");
   if (!btn) return;
-  const isFollowing = btn.dataset.following === "true";
-  btn.dataset.following = !isFollowing;
-  if (!isFollowing) {
-    btn.textContent = "Following";
-    btn.classList.remove("btn-pin");
-    btn.classList.add("btn-pin-outline");
-  } else {
-    btn.textContent = "Follow";
-    btn.classList.add("btn-pin");
-    btn.classList.remove("btn-pin-outline");
+  
+  e.preventDefault();
+  
+  const userId = btn.getAttribute("data-user-id");
+  if (!userId) {
+    console.error("data-user-id attribute not found on follow button");
+    return;
+  }
+
+  btn.style.pointerEvents = "none";
+  const originalText = btn.textContent;
+  btn.textContent = "...";
+
+  try {
+    const response = await fetch("/user/follow", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ user_id: userId }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+      if (data.status === "followed") {
+        btn.textContent = "Following";
+        btn.classList.remove("btn-pin");
+        btn.classList.add("btn-outline-light");
+      } else {
+        btn.textContent = "Follow";
+        btn.classList.add("btn-pin");
+        btn.classList.remove("btn-outline-light");
+      }
+    } else {
+      btn.textContent = originalText;
+      if (typeof showToast === "function") {
+        showToast(data.message || "Gagal melakukan aksi follow", "error");
+      }
+    }
+  } catch (error) {
+    console.error("Gagal melakukan follow:", error);
+    btn.textContent = originalText;
+    if (typeof showToast === "function") {
+      showToast("Terjadi kesalahan jaringan", "error");
+    }
+  } finally {
+    btn.style.pointerEvents = "auto";
   }
 });
 

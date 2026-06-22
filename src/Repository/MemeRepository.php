@@ -27,6 +27,24 @@ class MemeRepository
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public function getFollowingMemes(int $follower_id): array
+    {
+        $query = "
+            SELECT m.*, 
+                   u.username, u.name, u.profile_picture,
+                   (SELECT COUNT(*) FROM likes l WHERE l.meme_id = m.meme_id) as likes_count,
+                   (SELECT COUNT(*) FROM comments c WHERE c.meme_id = m.meme_id) as comments_count
+            FROM memes m
+            JOIN users u ON m.user_id = u.user_id
+            JOIN follows f ON m.user_id = f.following_id
+            WHERE f.follower_id = ?
+            ORDER BY m.created_at DESC
+        ";
+        $statement = self::$connDB->prepare($query);
+        $statement->execute([$follower_id]);
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function getMemeById(int $meme_id): array
     {
         $statement = self::$connDB->prepare("CALL get_meme_by_id(?)");

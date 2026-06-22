@@ -31,11 +31,45 @@ $admin = new AdminController();
 $search = new SearchController();
 $bookmark = new \App\Pinnio\Controller\BookmarkController();
 $report = new \App\Pinnio\Controller\ReportController();
+$follow = new \App\Pinnio\Controller\FollowController();
+$userProfile = new \App\Pinnio\Controller\UserProfileController();
+$chat = new \App\Pinnio\Controller\ChatController();
+$notification = new \App\Pinnio\Controller\NotificationController();
+
+Router::add("/user/follow", "POST", fn() => $follow->toggle(), [
+  fn() => AuthMiddleware::isNotAuth()
+]);
+
+Router::add("/u/([0-9a-zA-Z\-_]+)", "GET", fn($username) => $userProfile->view($username), [
+  fn() => AuthMiddleware::isNotAuth()
+]);
+
+// Notification Routes
+Router::add("/notifications", "GET", fn() => $notification->index(), [
+  fn() => AuthMiddleware::isNotAuth()
+]);
+
+// Chat Routes
+Router::add("/chat", "GET", fn() => $chat->index(), [
+  fn() => AuthMiddleware::isNotAuth()
+]);
+Router::add("/chat/([0-9a-zA-Z\-_]+)", "GET", fn($username) => $chat->detail($username), [
+  fn() => AuthMiddleware::isNotAuth()
+]);
+Router::add("/chat/([0-9a-zA-Z\-_]+)/poll", "GET", fn($username) => $chat->poll($username), [
+  fn() => AuthMiddleware::isNotAuth()
+]);
+Router::add("/api/chat/send", "POST", fn() => $chat->send(), [
+  fn() => AuthMiddleware::isNotAuth()
+]);
 
 Router::add("/", "GET", fn() => $home->landing(), [
   fn() => AuthMiddleware::isAuth()
 ]);
 Router::add("/home", "GET", fn() => $home->home(), [
+  fn() => AuthMiddleware::isNotAuth()
+]);
+Router::add("/home/following", "GET", fn() => $home->home('following'), [
   fn() => AuthMiddleware::isNotAuth()
 ]);
 

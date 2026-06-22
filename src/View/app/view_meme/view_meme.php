@@ -26,7 +26,9 @@
                 ☕</div>
               <div>
                 <div style="font-weight:700;font-size:15px;">
-                  <?= $data["meme"]["name"] ? $data["meme"]["name"] : $data["meme"]["username"] ?>
+                  <a href="/u/<?= htmlspecialchars($data['meme']['username']) ?>" style="color:inherit;text-decoration:none;">
+                    <?= $data["meme"]["name"] ? $data["meme"]["name"] : $data["meme"]["username"] ?>
+                  </a>
                 </div>
                 <div style="color:var(--pin-muted);font-size:13px;">@<?= $data["meme"]["username"] ?></div>
               </div>

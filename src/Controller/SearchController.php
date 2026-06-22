@@ -23,11 +23,17 @@ class SearchController
     $query = $query ?? '';
     $users = [];
 
+    $currentUser = self::$userService->getUserById($_SESSION['auth']["user_id"]);
+    
+    $connDB = Database::connect();
+    $followService = new \App\Pinnio\Service\FollowService(new \App\Pinnio\Repository\FollowRepository($connDB));
+    
     if (!empty($query)) {
       $users = self::$userService->searchUsers($query);
+      foreach ($users as &$u) {
+        $u['is_following'] = $followService->isFollowing($_SESSION['auth']["user_id"], $u['user_id']);
+      }
     }
-
-    $currentUser = self::$userService->getUserById($_SESSION['auth']["user_id"]);
 
     View::app("search", [
       "title" => "Search — PinThread",

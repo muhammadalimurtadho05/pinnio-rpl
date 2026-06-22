@@ -8,24 +8,25 @@ use App\Pinnio\Repository\LikeRepository;
 class LikeController
 {
   private static LikeRepository $likeRepository;
+  private static \App\Pinnio\Repository\MemeRepository $memeRepository;
+  private static \App\Pinnio\Service\NotificationService $notificationService;
   
   public function __construct()
   {
-    // Menginisialisasi koneksi database dan repository persis seperti di CommentController
     $connDB = Database::connect();
     self::$likeRepository = new LikeRepository($connDB);
+    self::$memeRepository = new \App\Pinnio\Repository\MemeRepository($connDB);
+    self::$notificationService = new \App\Pinnio\Service\NotificationService(new \App\Pinnio\Repository\NotificationRepository($connDB));
   }
 
   public function toggle(): void
   {
-    // Mengatur header agar browser tahu ini balasan untuk JavaScript (AJAX)
     header('Content-Type: application/json');
 
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
 
-    // Menyesuaikan pemanggilan session dengan struktur auth kamu
     if (!isset($_SESSION["auth"]["user_id"])) {
         http_response_code(401);
         echo json_encode(['error' => 'Silakan login terlebih dahulu']);
@@ -43,10 +44,16 @@ class LikeController
 
     $userId = $_SESSION["auth"]["user_id"];
 
-    // Memanggil fungsi dari repository yang sudah diinisialisasi di __construct
     $result = self::$likeRepository->toggleLike($userId, $memeId);
 
-    // Mengembalikan hasil ke browser (JavaScript)
+    // If liked, trigger a notification
+    if ($result['status'] === 'liked') {
+        $meme = self::$memeRepository->getMemeById($memeId);
+        if ($meme && isset($meme['user_id'])) {
+            self::$notificationService->addNotification($meme['user_id'], $userId, 'like', $memeId);
+        }
+    }
+
     echo json_encode($result);
   }
 }

@@ -36,10 +36,15 @@ class HomeController
     ]);
   }
 
-  public function home(): void
+  public function home(string $activeTab = 'forYou'): void
   {
     $user = self::$userService->getUserById($_SESSION['auth']["user_id"]);
-    $memes = self::$memeService->getMemes();
+    
+    if ($activeTab === 'following') {
+      $memes = self::$memeService->getFollowingMemes($_SESSION['auth']["user_id"]);
+    } else {
+      $memes = self::$memeService->getMemes();
+    }
 
     $connDB = Database::connect();
     $likeRepository = new \App\Pinnio\Repository\LikeRepository($connDB);
@@ -58,6 +63,7 @@ class HomeController
       "user" => $user,
       "memes" => $memes,
       "script" => ["home.js"],
+      "active_tab" => $activeTab
     ]);
   }
 }

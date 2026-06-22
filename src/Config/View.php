@@ -25,6 +25,16 @@ class View
         "icon" => "search"
       ],
       [
+        "name" => "Chat",
+        "path" => "/chat",
+        "icon" => "chat-dots-fill"
+      ],
+      [
+        "name" => "Notifikasi",
+        "path" => "/notifications",
+        "icon" => "bell-fill"
+      ],
+      [
         "name" => "Profile",
         "path" => "/profile",
         "icon" => "person-fill"

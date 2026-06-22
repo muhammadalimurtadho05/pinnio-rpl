@@ -39,6 +39,11 @@ class MemeService
         return self::$memeRepository->getMemes($user_id);
     }
 
+    public function getFollowingMemes(int $user_id): array
+    {
+        return self::$memeRepository->getFollowingMemes($user_id);
+    }
+
     public function getMemeById(int $meme_id): array
     {
         return self::$memeRepository->getMemeById($meme_id);

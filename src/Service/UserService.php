@@ -93,6 +93,8 @@ class UserService
   public function getRecentUsers(int $limit = 5): array
   {
     return self::$userRepository->getRecentUsers($limit);
+  }
+
   public function getUserStats(int $userID): array
   {
     return [
