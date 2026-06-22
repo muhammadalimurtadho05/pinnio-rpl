@@ -1,0 +1,221 @@
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 768px) {
+  .auth-page {
+    grid-template-columns: 1fr;
+  }
+  .auth-art {
+    display: none !important;
+  }
+}
+.auth-art {
+  background: var(--pin-mid);
+  border-right: 1px solid var(--pin-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  position: relative;
+  overflow: hidden;
+}
+.art-glow {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(
+    ellipse,
+    rgba(255, 224, 51, 0.1) 0%,
+    transparent 65%
+  );
+}
+.steps-list {
+  list-style: none;
+  width: 100%;
+  max-width: 300px;
+  position: relative;
+  z-index: 1;
+}
+.steps-list li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--pin-card);
+  border: 1px solid var(--pin-border);
+  border-radius: 14px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.step-num {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 224, 51, 0.12);
+  border: 1px solid rgba(255, 224, 51, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--pin-yellow);
+  flex-shrink: 0;
+}
+
+.auth-form-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 40px;
+  overflow-y: auto;
+}
+.auth-box {
+  width: 100%;
+  max-width: 420px;
+}
+.auth-logo {
+  font-family: "Syne", sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  margin-bottom: 32px;
+}
+.auth-logo span {
+  color: var(--pin-yellow);
+}
+.auth-title {
+  font-family: "Syne", sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+.auth-sub {
+  color: var(--pin-muted);
+  font-size: 14px;
+  margin-bottom: 28px;
+}
+.form-label-pin {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.input-group-pin {
+  position: relative;
+}
+.input-group-pin .input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--pin-muted);
+  font-size: 16px;
+  pointer-events: none;
+}
+.input-group-pin .pin-input {
+  padding-left: 40px;
+}
+
+.pass-strength {
+  margin-top: 8px;
+}
+.strength-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--pin-border);
+  overflow: hidden;
+}
+.strength-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition:
+    width 0.3s,
+    background 0.3s;
+  width: 0%;
+}
+.strength-label {
+  font-size: 12px;
+  color: var(--pin-muted);
+  margin-top: 4px;
+}
+
+.terms-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.terms-check input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--pin-border);
+  border-radius: 5px;
+  background: var(--pin-mid);
+  cursor: pointer;
+  accent-color: var(--pin-yellow);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.terms-check label {
+  font-size: 13px;
+  color: var(--pin-muted);
+  cursor: pointer;
+}
+.terms-check a {
+  color: var(--pin-yellow);
+  font-weight: 600;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--pin-border);
+}
+.divider span {
+  color: var(--pin-muted);
+  font-size: 13px;
+}
+.btn-social {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--pin-card);
+  border: 1.5px solid var(--pin-border);
+  color: var(--pin-white);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-social:hover {
+  border-color: var(--pin-muted);
+}
+.auth-footer {
+  margin-top: 28px;
+  text-align: center;
+  color: var(--pin-muted);
+  font-size: 14px;
+}
+.auth-footer a {
+  color: var(--pin-yellow);
+  font-weight: 600;
+}

@@ -1,0 +1,176 @@
+/* Comment reply line */
+.comment-thread-line {
+  width: 2px;
+  background: var(--pin-border);
+  flex-shrink: 0;
+  border-radius: 2px;
+  margin: 4px auto;
+}
+
+/* Original post — slightly bigger */
+.original-post-content {
+  font-size: 17px;
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+
+.post-meta-row {
+  color: var(--pin-muted);
+  font-size: 13px;
+  padding: 12px 0;
+  border-top: 1px solid var(--pin-border);
+  border-bottom: 1px solid var(--pin-border);
+  margin-bottom: 4px;
+}
+
+.post-stats {
+  display: flex;
+  gap: 20px;
+}
+
+.post-stat span {
+  font-weight: 700;
+  color: var(--pin-white);
+  font-size: 15px;
+}
+
+.post-stat small {
+  color: var(--pin-muted);
+  font-size: 13px;
+}
+
+/* Comment compose */
+.comment-compose {
+  border-bottom: 1px solid var(--pin-border);
+  padding: 16px 0;
+}
+
+.comment-compose textarea {
+  min-height: 56px;
+}
+
+/* Comment item — no hover cursor pointer since not clickable to another page */
+.comment-item {
+  border-bottom: 1px solid var(--pin-border);
+  padding: 16px 0;
+  transition: background 0.1s;
+}
+.comment-item:hover {
+  background: rgba(255, 255, 255, 0.012);
+}
+
+/* Reply badge */
+.reply-to-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--pin-yellow);
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+/* Delete button in dropdown */
+.dropdown-menu-pin {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: var(--pin-card);
+  border: 1px solid var(--pin-border);
+  border-radius: 14px;
+  padding: 6px;
+  min-width: 180px;
+  z-index: 100;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  display: none;
+}
+.dropdown-menu-pin.show {
+  display: block;
+  animation: fadeUp 0.15s ease;
+}
+.dropdown-item-pin {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--pin-white);
+  cursor: pointer;
+  transition: background 0.15s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+.dropdown-item-pin:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+.dropdown-item-pin.danger {
+  color: #ff4d6d;
+}
+.dropdown-item-pin.danger:hover {
+  background: rgba(255, 77, 109, 0.1);
+}
+
+/* Delete confirm modal */
+.delete-modal-inner {
+  max-width: 380px;
+  width: 90%;
+  margin: 0 auto;
+  text-align: center;
+  padding: 32px 28px;
+}
+
+.delete-icon-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255, 77, 109, 0.12);
+  border: 1.5px solid rgba(255, 77, 109, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 20px;
+  color: #ff4d6d;
+}
+
+.btn-danger-pin {
+  background: #ff4d6d;
+  color: #fff;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  border-radius: 100px;
+  padding: 10px 28px;
+  transition: all 0.2s ease;
+}
+.btn-danger-pin:hover {
+  background: #e63357;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 77, 109, 0.3);
+}
+.btn-danger-pin:active {
+  transform: translateY(0);
+}
+
+/* Image attachment */
+.post-image-wrap {
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.post-image-placeholder {
+  background: linear-gradient(135deg, #1e1e1e, #1a1a1a);
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56px;
+}
+
+/* Relative dropdown wrapper */
+.action-menu-wrap {
+  position: relative;
+}
