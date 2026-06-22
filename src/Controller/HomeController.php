@@ -44,9 +44,13 @@ class HomeController
     $connDB = Database::connect();
     $likeRepository = new \App\Pinnio\Repository\LikeRepository($connDB);
     $likedMemeIds = $likeRepository->getLikedMemeIds($_SESSION['auth']["user_id"]);
+    
+    $bookmarkRepository = new \App\Pinnio\Repository\BookmarkRepository($connDB);
+    $bookmarkedMemeIds = $bookmarkRepository->getBookmarkedMemeIds($_SESSION['auth']["user_id"]);
 
     foreach ($memes as &$meme) {
       $meme['is_liked'] = in_array($meme['meme_id'], $likedMemeIds);
+      $meme['is_bookmarked'] = in_array($meme['meme_id'], $bookmarkedMemeIds);
     }
 
     View::app("home", [

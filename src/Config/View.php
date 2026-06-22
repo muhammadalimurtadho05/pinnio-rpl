@@ -20,6 +20,11 @@ class View
         "icon" => "house-fill"
       ],
       [
+        "name" => "Search",
+        "path" => "/search",
+        "icon" => "search"
+      ],
+      [
         "name" => "Profile",
         "path" => "/profile",
         "icon" => "person-fill"

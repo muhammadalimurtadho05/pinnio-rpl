@@ -41,6 +41,37 @@
   </form>
 </div>
 
+</div>
+
+<!-- Report Modal -->
+<div class="pin-modal-overlay" id="reportModal">
+  <div class="pin-modal" style="max-width:400px;">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <h6 style="font-family:'Syne',sans-serif;font-weight:700;margin:0;">Report Post</h6>
+      <button type="button" onclick="closeModal('reportModal')" class="btn-pin-ghost p-1"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div>
+      <input type="hidden" id="reportMemeId" value="">
+      <p style="color:var(--pin-muted);font-size:14px;margin-bottom:16px;">Please tell us why you are reporting this post.</p>
+      
+      <div class="mb-3">
+        <select id="reportReason" class="form-select bg-dark text-white border-secondary">
+          <option value="" disabled selected>Select a reason...</option>
+          <option value="spam">Spam</option>
+          <option value="inappropriate">Inappropriate Content</option>
+          <option value="harassment">Harassment</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="d-flex justify-content-end mt-4">
+        <button type="button" class="btn btn-secondary me-2" onclick="closeModal('reportModal')">Cancel</button>
+        <button type="button" class="btn btn-danger" onclick="submitReport()">Report</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="public/js/bootstrap.bundle.min.js"></script>
 <script src="/public/js/app.js"></script>
 <?php if (isset($data["error_message"])): ?>

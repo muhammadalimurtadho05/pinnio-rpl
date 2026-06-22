@@ -43,8 +43,14 @@
                         <span style="font-weight:700;font-size:14px;"><?= $meme['username'] ?></span>
                         <span style="color:var(--pin-muted);font-size:13px;margin-left:6px;"><?= $meme['created_at'] ?></span>
                       </div>
-                      <button class="btn-pin-ghost p-1" onclick="event.stopPropagation()"><i
-                          class="bi bi-three-dots"></i></button>
+                      <div class="dropdown" onclick="event.stopPropagation()">
+                        <button class="btn-pin-ghost p-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="bi bi-three-dots"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+                          <li><a class="dropdown-item text-danger" href="javascript:void(0)" onclick="openReportModal(<?= $meme['meme_id'] ?>)"><i class="bi bi-flag me-2"></i>Report</a></li>
+                        </ul>
+                      </div>
                     </div>
                     <p style="font-size:15px;margin-bottom:12px;"><?= $meme['caption'] ?></p>
                     <?php if (isset($meme['image_url']) && !empty($meme['image_url'])): ?>
@@ -52,13 +58,16 @@
                         <img src="<?= $meme['image_url'] ?>" alt="Meme image" style="width:100%;height:auto;max-height:400px;object-fit:cover;display:block;" />
                       </div>
                     <?php endif ?>
-                    <div class="thread-actions" onclick="event.stopPropagation()">
+                    <div class="thread-actions">
                       <button class="thread-action-btn <?= isset($meme['is_liked']) && $meme['is_liked'] ? 'liked' : '' ?>" data-action="like" data-meme-id="<?= $meme['meme_id'] ?>">
                         <i class="bi <?= isset($meme['is_liked']) && $meme['is_liked'] ? 'bi-heart-fill' : 'bi-heart' ?>"></i>
                         <span class="action-count"><?= $meme['likes_count'] ?></span>
                       </button>
                       <button class="thread-action-btn"><i class="bi bi-chat"></i><span
                           class="action-count"><?= $meme['comments_count'] ?></span></button>
+                      <button class="thread-action-btn <?= isset($meme['is_bookmarked']) && $meme['is_bookmarked'] ? 'bookmarked' : '' ?>" data-action="bookmark" data-meme-id="<?= $meme['meme_id'] ?>">
+                        <i class="bi <?= isset($meme['is_bookmarked']) && $meme['is_bookmarked'] ? 'bi-bookmark-fill' : 'bi-bookmark' ?>"></i>
+                      </button>
                     </div>
                   </div>
                 </div>

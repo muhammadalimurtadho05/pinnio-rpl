@@ -67,6 +67,32 @@ class UserRepository
     $statement = self::$connDB->prepare("SELECT user_id, username, name, email, role, created_at FROM users ORDER BY created_at DESC LIMIT ?");
     $statement->bindValue(1, $limit, \PDO::PARAM_INT);
     $statement->execute();
+  public function getFollowersCount(int $userID): int
+  {
+    $statement = self::$connDB->prepare("SELECT COUNT(*) FROM follows WHERE following_id = ?");
+    $statement->execute([$userID]);
+    return (int)$statement->fetchColumn();
+  }
+
+  public function getFollowingCount(int $userID): int
+  {
+    $statement = self::$connDB->prepare("SELECT COUNT(*) FROM follows WHERE follower_id = ?");
+    $statement->execute([$userID]);
+    return (int)$statement->fetchColumn();
+  }
+
+  public function getPostsCount(int $userID): int
+  {
+    $statement = self::$connDB->prepare("SELECT COUNT(*) FROM memes WHERE user_id = ?");
+    $statement->execute([$userID]);
+    return (int)$statement->fetchColumn();
+  }
+
+  public function searchUsers(string $query): array
+  {
+    $searchTerm = "%" . $query . "%";
+    $statement = self::$connDB->prepare("SELECT user_id, username, name, profile_picture FROM users WHERE username LIKE ? OR name LIKE ? LIMIT 20");
+    $statement->execute([$searchTerm, $searchTerm]);
     return $statement->fetchAll(\PDO::FETCH_ASSOC);
   }
 }

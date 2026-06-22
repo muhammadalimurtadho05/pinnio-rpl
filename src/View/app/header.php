@@ -24,7 +24,8 @@
           Pin<span>Thread</span></div>
         <ul class="sidebar-nav">
           <?php foreach ($data["navigation"] as $nav): ?>
-            <li><a href="<?= $nav["path"] ?>" <?= ($_SERVER['REQUEST_URI'] === $nav["path"]) ? 'class="active"' : null ?>><span class="nav-icon"><i class="bi bi-<?= $nav["icon"] ?>"></i></span> <?= $nav["name"] ?></a>
+            <?php $isActive = ($_SERVER['REQUEST_URI'] === $nav["path"]) || ($nav["path"] !== '/' && strpos($_SERVER['REQUEST_URI'], $nav["path"] . '/') === 0); ?>
+            <li><a href="<?= $nav["path"] ?>" <?= $isActive ? 'class="active"' : null ?>><span class="nav-icon"><i class="bi bi-<?= $nav["icon"] ?>"></i></span> <?= $nav["name"] ?></a>
             </li>
           <?php endforeach ?>
         </ul>

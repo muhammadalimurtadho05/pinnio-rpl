@@ -93,5 +93,20 @@ class UserService
   public function getRecentUsers(int $limit = 5): array
   {
     return self::$userRepository->getRecentUsers($limit);
+  public function getUserStats(int $userID): array
+  {
+    return [
+      "followers_count" => self::$userRepository->getFollowersCount($userID),
+      "following_count" => self::$userRepository->getFollowingCount($userID),
+      "posts_count" => self::$userRepository->getPostsCount($userID)
+    ];
+  }
+
+  public function searchUsers(string $query): array
+  {
+    if (empty(trim($query))) {
+      return [];
+    }
+    return self::$userRepository->searchUsers(trim($query));
   }
 }
