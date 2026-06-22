@@ -70,6 +70,64 @@ document.addEventListener("click", async (e) => {
   }
 });
 
+// Bookmark toggle (AJAX)
+document.addEventListener("click", async (e) => {
+  const btn = e.target.closest('.thread-action-btn[data-action="bookmark"]');
+  if (!btn) return;
+
+  e.preventDefault();
+
+  const memeId = btn.getAttribute("data-meme-id");
+  if (!memeId) {
+    console.error("data-meme-id attribute not found on bookmark button");
+    return;
+  }
+
+  const icon = btn.querySelector("i");
+  btn.style.pointerEvents = "none";
+
+  try {
+    const response = await fetch("/meme/bookmark", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ meme_id: memeId }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      if (data.status === "added") {
+        btn.classList.add("bookmarked");
+        if (icon) {
+          icon.classList.remove("bi-bookmark");
+          icon.classList.add("bi-bookmark-fill");
+          icon.style.color = "var(--pin-yellow)";
+        }
+      } else {
+        btn.classList.remove("bookmarked");
+        if (icon) {
+          icon.classList.remove("bi-bookmark-fill");
+          icon.classList.add("bi-bookmark");
+          icon.style.color = "";
+        }
+      }
+    } else {
+      if (typeof showToast === "function") {
+        showToast(data.error || "Gagal melakukan aksi bookmark", "error");
+      }
+    }
+  } catch (error) {
+    console.error("Gagal melakukan bookmark:", error);
+    if (typeof showToast === "function") {
+      showToast("Terjadi kesalahan jaringan", "error");
+    }
+  } finally {
+    btn.style.pointerEvents = "auto";
+  }
+});
+
 // Clickable thread items (excluding action buttons/links/dropdowns)
 document.addEventListener("click", (e) => {
   const thread = e.target.closest(".clickable-thread");
@@ -138,6 +196,45 @@ document.addEventListener("input", (e) => {
 // Fake avatar placeholder generator
 function avatarUrl(seed, size = 48) {
   return `https://api.dicebear.com/7.x/thumbs/svg?seed=${seed}&size=${size}`;
+}
+
+// Report Logic
+function openReportModal(memeId) {
+  document.getElementById('reportMemeId').value = memeId;
+  document.getElementById('reportReason').value = '';
+  openModal('reportModal');
+}
+
+async function submitReport() {
+  const memeId = document.getElementById('reportMemeId').value;
+  const reason = document.getElementById('reportReason').value;
+
+  if (!reason) {
+    showToast("Please select a reason.", "error");
+    return;
+  }
+
+  try {
+    const response = await fetch("/meme/report", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ meme_id: memeId, reason: reason }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      showToast(data.message, "success");
+      closeModal('reportModal');
+    } else {
+      showToast(data.message || "Failed to submit report", "error");
+    }
+  } catch (error) {
+    console.error("Error submitting report:", error);
+    showToast("Network error occurred", "error");
+  }
 }
 
 // Simple toast

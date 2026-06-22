@@ -10,6 +10,7 @@ use App\Pinnio\Controller\SettingController;
 use App\Pinnio\Controller\SignupController;
 use App\Pinnio\Middleware\AuthMiddleware;
 use App\Pinnio\Controller\LikeController;
+use App\Pinnio\Controller\SearchController;
 
 require_once __DIR__ . "/vendor/autoload.php";
 
@@ -24,6 +25,9 @@ $meme = new MemeController();
 $comment = new CommentController();
 $setting = new SettingController();
 $like = new LikeController();
+$search = new SearchController();
+$bookmark = new \App\Pinnio\Controller\BookmarkController();
+$report = new \App\Pinnio\Controller\ReportController();
 
 Router::add("/", "GET", fn() => $home->landing(), [
   fn() => AuthMiddleware::isAuth()
@@ -32,6 +36,13 @@ Router::add("/home", "GET", fn() => $home->home(), [
   fn() => AuthMiddleware::isNotAuth()
 ]);
 
+Router::add("/search", "GET", fn() => $search->page(), [
+  fn() => AuthMiddleware::isNotAuth()
+]);
+
+Router::add("/search/([0-9a-zA-Z\-_]+)", "GET", fn($query) => $search->page($query), [
+  fn() => AuthMiddleware::isNotAuth()
+]);
 
 Router::add("/pengaturan", "GET", fn() => $setting->index(), [
   fn() => AuthMiddleware::isNotAuth()
@@ -39,6 +50,9 @@ Router::add("/pengaturan", "GET", fn() => $setting->index(), [
 
 
 Router::add("/profile", "GET", fn() => $profile->page(), [
+  fn() => AuthMiddleware::isNotAuth()
+]);
+Router::add("/profile/bookmarks", "GET", fn() => $profile->bookmarks(), [
   fn() => AuthMiddleware::isNotAuth()
 ]);
 Router::add("/profile/update", "POST", fn() => $profile->update(), [
@@ -73,6 +87,14 @@ Router::add("/logout", "GET", fn() => $auth->logout(), [
 ]);
 
 Router::add("/meme/like", "POST", fn() => $like->toggle(), [
+  fn() => AuthMiddleware::isNotAuth()
+]);
+
+Router::add("/meme/bookmark", "POST", fn() => $bookmark->toggle(), [
+  fn() => AuthMiddleware::isNotAuth()
+]);
+
+Router::add("/meme/report", "POST", fn() => $report->report(), [
   fn() => AuthMiddleware::isNotAuth()
 ]);
 

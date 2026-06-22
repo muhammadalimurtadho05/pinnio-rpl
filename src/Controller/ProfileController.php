@@ -34,8 +34,12 @@ class ProfileController
     $likeRepository = new \App\Pinnio\Repository\LikeRepository($connDB);
     $likedMemeIds = $likeRepository->getLikedMemeIds($_SESSION['auth']["user_id"]);
 
+    $bookmarkRepository = new \App\Pinnio\Repository\BookmarkRepository($connDB);
+    $bookmarkedMemeIds = $bookmarkRepository->getBookmarkedMemeIds($_SESSION['auth']["user_id"]);
+
     foreach ($memes as &$meme) {
       $meme['is_liked'] = in_array($meme['meme_id'], $likedMemeIds);
+      $meme['is_bookmarked'] = in_array($meme['meme_id'], $bookmarkedMemeIds);
     }
     return $memes;
   }
@@ -45,13 +49,38 @@ class ProfileController
     $user = self::$userService->getUserById($_SESSION['auth']["user_id"]);
     $memes = self::$memeService->getMemes($_SESSION['auth']["user_id"]);
     $memes = $this->enrichMemesWithLikedStatus($memes);
+    $stats = self::$userService->getUserStats($_SESSION['auth']["user_id"]);
 
     View::app("profile", [
       "title" => "Profil — PinThread",
       "style" => "profile.css",
       "script" => ["profile.js"],
       "user" => $user,
-      "memes" => $memes
+      "memes" => $memes,
+      "stats" => $stats,
+      "active_tab" => "postingan"
+    ]);
+  }
+
+  public function bookmarks(): void
+  {
+    $user = self::$userService->getUserById($_SESSION['auth']["user_id"]);
+    
+    $connDB = Database::connect();
+    $bookmarkService = new \App\Pinnio\Service\BookmarkService(new \App\Pinnio\Repository\BookmarkRepository($connDB));
+    $memes = $bookmarkService->getBookmarkedMemes($_SESSION['auth']["user_id"]);
+    
+    $memes = $this->enrichMemesWithLikedStatus($memes);
+    $stats = self::$userService->getUserStats($_SESSION['auth']["user_id"]);
+
+    View::app("profile", [
+      "title" => "Tersimpan — PinThread",
+      "style" => "profile.css",
+      "script" => ["profile.js"],
+      "user" => $user,
+      "memes" => $memes,
+      "stats" => $stats,
+      "active_tab" => "bookmarks"
     ]);
   }
 
@@ -70,6 +99,7 @@ class ProfileController
       self::$userService->update(self::$userModel, $_SESSION['auth']["user_id"]);
       View::redirect("/profile");
     } catch (ValidationException $e) {
+      $stats = self::$userService->getUserStats($_SESSION['auth']["user_id"]);
       // PERBAIKAN: Gunakan View::app, bukan View::render
       View::app("profile", [
         "title" => "Profil — PinThread",
@@ -77,6 +107,7 @@ class ProfileController
         "script" => ["profile.js"],
         "user" => $user,
         "memes" => $memes,
+        "stats" => $stats,
         "error_message" => $e->getMessage()
       ]);
     }
@@ -92,12 +123,14 @@ class ProfileController
       self::$userService->delete($_SESSION['auth']["user_id"]);
       View::redirect("/");
     } catch (ValidationException $e) {
+      $stats = self::$userService->getUserStats($_SESSION['auth']["user_id"]);
       View::render("profile", [
         "title" => "Profil — PinThread",
         "style" => "profile.css",
         "script" => ["profile.js"],
         "user" => $user,
         "memes" => $memes,
+        "stats" => $stats,
         "error_message" => $e->getMessage()
       ]);
     }
